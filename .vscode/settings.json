@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "black-formatter.args": [
+        "--config",
+        ".pyproject.toml"
+    ],
+    "editor.formatOnPaste": true,
+    "notebook.formatOnSave.enabled": true,
+    "files.associations": {
+        "*.py": "python"
+    },
+    "notebook.defaultFormatter": "ms-python.black-formatter"
+}
