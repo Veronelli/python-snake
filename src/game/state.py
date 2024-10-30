@@ -1,6 +1,7 @@
 from logging import getLogger
 from typing import Any
 from src.game.game import Game
+import curses
 
 logger = getLogger(__name__)
 
