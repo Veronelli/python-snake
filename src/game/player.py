@@ -1,4 +1,4 @@
-import curses
+from src.common import DirectionPlayer
 
 __all__ = ('Snake',)
 
@@ -27,16 +27,28 @@ class Snake:
     def get_position(self) -> None:
         return self.position
 
-    def expect_inputs(self) -> None:
+    def expect_inputs(self, key: int) -> None:
         '''
         Listen to any inputs and change direction of the snake
         '''
-        key = self.screen.getch()
-        if key == curses.KEY_UP:
+
+        if key == ord('w'):
             self.change_direction(0, -1)
-        elif key == curses.KEY_DOWN:
+            self.direction_text = (
+                DirectionPlayer.UP
+            )
+        elif key == ord('s'):
             self.change_direction(0, 1)
-        elif key == curses.KEY_LEFT:
+            self.direction_text = (
+                DirectionPlayer.DOWN
+            )
+        elif key == ord('a'):
             self.change_direction(-1, 0)
-        elif key == curses.KEY_RIGHT:
+            self.direction_text = (
+                DirectionPlayer.LEFT
+            )
+        elif key == ord('d'):
             self.change_direction(1, 0)
+            self.direction_text = (
+                DirectionPlayer.RIGHT
+            )

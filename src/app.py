@@ -1,4 +1,6 @@
+import curses
 from typing import Any
+from src.game.game import Game
 
 __all__ = ("Application",)
 
@@ -16,9 +18,7 @@ class Application:
         self.game_settings = settings
 
     def run(self) -> None:
-        from src.game.game import Game
-
-        game = Game(
-            game_settings=self.game_settings
-        )
+        game = curses.wrapper(
+            Game,
+            game_settings=self.game_settings)
         game.start()

@@ -16,7 +16,7 @@ class GameState:
         raise NotImplementedError
 
     def enter(self, game):
-        pass
+        raise NotImplementedError
 
 
 class PausedState(GameState):

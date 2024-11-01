@@ -1,2 +1,3 @@
-if __name__ is "__main__":
-    pass
+from src import Application
+if __name__ == "__main__":
+    Application().run()

@@ -8,7 +8,6 @@ class Singleton(type):
 
     _instances: object = {}
 
-    @classmethod
     def __call__(cls, *args, **kwargs) -> None:
         if cls not in cls._instances:
             cls._instances[cls] = super(
