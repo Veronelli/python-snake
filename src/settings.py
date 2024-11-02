@@ -5,24 +5,24 @@ from pydantic_settings import (
 from src.common import DirectionPlayer
 
 __all__ = (
-    'Settings',
-    'settings',
+    "Settings",
+    "settings",
 )
 
 
 class Player(BaseException):
-    POSITION: list[int, int] = [50, 50]
+    POSITION: list[int, int] = [6, 2]
     DIRECTION: list[int, int] = [0, 0]
-    DIRECTION_TEXT: DirectionPlayer = (
-        DirectionPlayer.RIGHT
-    )
+    DIRECTION_TEXT: DirectionPlayer = DirectionPlayer.RIGHT
+    SPEED: float = 0.005
 
 
 class Settings(BaseSettings):
     GAME_SPEED: int = 1
     TIMEOUT: int = 60000
     PLAYER: Player = Player()
-    DIMENCION: str = '16x16'
+    WIDTH: int = 20
+    HEIGHT: int = 20
 
 
 settings = Settings()

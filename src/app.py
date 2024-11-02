@@ -18,7 +18,5 @@ class Application:
         self.game_settings = settings
 
     def run(self) -> None:
-        game = curses.wrapper(
-            Game,
-            game_settings=self.game_settings)
+        game = curses.wrapper(Game, game_settings=self.game_settings)
         game.start()

@@ -1,12 +1,12 @@
 from enum import StrEnum
 
 __all__ = [
-    'DirectionPlayer',
+    "DirectionPlayer",
 ]
 
 
 class DirectionPlayer(StrEnum):
-    UP = 'UP'
-    DOWN = 'DOWN'
-    LEFT = 'LEFT'
-    RIGHT = 'RIGHT'
+    UP = "UP"
+    DOWN = "DOWN"
+    LEFT = "LEFT"
+    RIGHT = "RIGHT"

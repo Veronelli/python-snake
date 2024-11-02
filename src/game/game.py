@@ -1,34 +1,34 @@
 import curses
 from enum import StrEnum
 from src.common import Singleton
-import time
 from typing import TYPE_CHECKING
 
 
 from src.game.player import Snake
-from src.settings import Settings
+from src.game.state import PlayingState
+from src.settings import Settings, settings
 
 if TYPE_CHECKING:
     from typing import Any
 
-__all__ = ('Game',)
+__all__ = ("Game",)
 
 
 class Game(metaclass=Singleton):
-    '''
+    """
     Snake game, this is the main class of the game, it is a singleton class
-    '''
+    """
 
-    'Register all events that will be listening'
+    "Register all events that will be listening"
 
     class StatusGame(StrEnum):
-        '''
+        """
         Enum to represent reproducing game status
 
-        '''
+        """
 
-        PLAYING = 'playing'
-        PAUSED = 'paused'
+        PLAYING = "playing"
+        PAUSED = "paused"
 
     def __init__(
         self,
@@ -41,29 +41,30 @@ class Game(metaclass=Singleton):
         self._state = Game.StatusGame.PAUSED
 
         player_settings = game_settings.PLAYER
-        self.player = Snake(
+        self.snake = Snake(
             position=player_settings.POSITION,
             direction=player_settings.DIRECTION,
             direction_text=player_settings.DIRECTION_TEXT,
+            speed=player_settings.SPEED,
         )
 
         self.game_settings = game_settings
 
     def start(self) -> None:
-        '''
+        """
         Start the game
-        '''
+        """
         self._state = Game.StatusGame.PLAYING
         curses.curs_set(0)
         curses.noecho()
         curses.cbreak()
         self._screen.keypad(True)
         self._screen.nodelay(True)
+
+        game_state = PlayingState()
         height, width = self._screen.getmaxyx()
-        while (
-            self._state == Game.StatusGame.PLAYING
-        ):
-            self._screen.clrtobot()
+        while self._state == Game.StatusGame.PLAYING:
+            game_state.update(game=self)
             key = self._screen.getch()
 
             self._screen.addstr(
@@ -74,10 +75,65 @@ class Game(metaclass=Singleton):
             self._screen.addstr(
                 0,
                 width - 5,
-                f"{self.player.direction_text}",
+                f"{self.snake.direction_text}",
             )
-            self.player.expect_inputs(key=key)
-            curses.napms(
-                self.game_settings.GAME_SPEED
-            )
+
+            self.snake.expect_inputs(key=key)
+            curses.napms(self.game_settings.GAME_SPEED)
+
             self._screen.refresh()
+            self._screen.clrtobot()
+            bottom_menu = "=" * width
+            self._screen.addstr(height - 2, 0, bottom_menu)
+
+            self._screen.addstr(
+                self.snake.snake[0]["position"][0],
+                self.snake.snake[0]["position"][1],
+                self.snake.snake[0]["character"],
+            )
+            self._screen.addstr(
+                5,
+                0,
+                "#" * (self.game_settings.WIDTH + 4),
+            )
+
+            for i in range(1, self.game_settings.HEIGHT + 1):
+                draw_index = i + 5
+                self._screen.addstr(draw_index, 0, "||")
+                if i == self.snake.snake[0]["position"][1]:
+                    self._screen.addstr(
+                        self.snake.snake[0]["position"][0],
+                        self.snake.snake[0]["position"][1],
+                        self.snake.snake[0]["character"],
+                    )
+
+                self._screen.addstr(
+                    draw_index,
+                    self.game_settings.WIDTH + 2,
+                    "||",
+                )
+            position_x = int(f"{(self.snake.position[1] - 2):.0f}")
+            position_y = int(f"{(self.snake.position[0] - 6):.0f}")
+            self._screen.addstr(
+                5,
+                self.game_settings.WIDTH + 2,
+                "||",
+            )
+            self._screen.addstr(
+                self.game_settings.HEIGHT + 6,
+                0,
+                "#" * (self.game_settings.WIDTH + 4),
+            )
+            if (
+                position_x > self.game_settings.WIDTH
+                or position_y > self.game_settings.HEIGHT
+                or position_x < 0
+                or position_y < 0
+            ):
+                self.snake.collided = True
+
+            self._screen.addstr(
+                height - 2,
+                int(width / 2) - 5,
+                f"[x: {position_x},y: {position_y}]",
+            )
