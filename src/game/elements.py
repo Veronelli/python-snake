@@ -1,10 +1,18 @@
 from src.common import DirectionPlayer
 from src.game.type import SnakeType
 
-__all__ = ("Snake",)
+__all__ = ('Snake', 'Wall')
 
 
-class Snake:
+class Element(abs):
+    def collition(self, element: object) -> None:
+        '''
+        Detect collition between two elements
+        '''
+        raise NotImplementedError('collition method must be implemented')
+        
+
+class Snake(Element):
 
     snake: list[SnakeType] = []
 
@@ -67,3 +75,17 @@ class Snake:
         elif key == ord("a"):
             self.change_direction(0, -1)
             self.direction_text = DirectionPlayer.DOWN
+
+
+class Wall(Element):
+    character = '#'
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return self.character
+    
+    def collition(self, object: Element) -> None:
+        if 

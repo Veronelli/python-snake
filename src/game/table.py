@@ -1,6 +1,6 @@
 __all__ = ('Table',)
 
-from src.game.wall import Wall
+from src.game.elements.wall import Wall
 
 
 class Table:

@@ -4,7 +4,7 @@ from src.common import Singleton
 from typing import TYPE_CHECKING
 
 
-from src.game.player import Snake
+from src.game.elements import Snake
 from src.game.state import GameState, PlayingState
 from src.settings import Settings, settings
 
