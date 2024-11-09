@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 
 from src.game.player import Snake
-from src.game.state import PlayingState
+from src.game.state import GameState, PlayingState
 from src.settings import Settings, settings
 
 if TYPE_CHECKING:
@@ -38,8 +38,7 @@ class Game(metaclass=Singleton):
         self._max_score = 100
         self._speed = 1
         self._screen = screen
-        self._state = Game.StatusGame.PAUSED
-
+        self._state: GameState = PlayingState()
         player_settings = game_settings.PLAYER
         self.snake = Snake(
             position=player_settings.POSITION,
@@ -50,11 +49,16 @@ class Game(metaclass=Singleton):
 
         self.game_settings = game_settings
 
+    def change_state(self, state: GameState) -> None:
+        """
+        Change the state of the game
+        """
+        self._state = state
+
     def start(self) -> None:
         """
         Start the game
         """
-        self._state = Game.StatusGame.PLAYING
         curses.curs_set(0)
         curses.noecho()
         curses.cbreak()
