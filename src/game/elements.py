@@ -4,13 +4,13 @@ from src.game.type import SnakeType
 __all__ = ('Snake', 'Wall')
 
 
-class Element(abs):
+class Element:
     def collition(self, element: object) -> None:
         '''
         Detect collition between two elements
         '''
         raise NotImplementedError('collition method must be implemented')
-        
+
 
 class Snake(Element):
 
@@ -23,7 +23,8 @@ class Snake(Element):
         direction_text: str,
         speed: float,
     ) -> None:
-        self.position = position
+        self.x = position[0]
+        self.y = position[1]
         self.direction: list[int] = direction
         self.direction_text: str = direction_text
         self.speed: float = speed
@@ -31,7 +32,7 @@ class Snake(Element):
             {
                 "character": "O",
                 "part": 0,
-                "position": self.position,
+                "position": [self.x, self.y],
             }
         )
         self._collided: bool = False
@@ -48,15 +49,15 @@ class Snake(Element):
         self.direction = (dx, dy)
 
     def move(self) -> None:
-        self.position[0] += self.direction[0] * self.speed
-        self.position[1] += self.direction[1] * self.speed
+        self.x += self.direction[0] * self.speed
+        self.y += self.direction[1] * self.speed
         self.snake[0]["position"] = [
-            int(self.position[0]),
-            int(self.position[1]),
+            int(self.x),
+            int(self.y),
         ]
 
     def get_position(self) -> None:
-        return self.position
+        return [self.x, self.y]
 
     def expect_inputs(self, key: int) -> None:
         """
@@ -86,6 +87,7 @@ class Wall(Element):
 
     def __str__(self):
         return self.character
-    
+
     def collition(self, object: Element) -> None:
-        if 
+        ...
+        # if

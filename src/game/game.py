@@ -67,7 +67,7 @@ class Game(metaclass=Singleton):
 
         game_state = PlayingState()
         height, width = self._screen.getmaxyx()
-        while self._state == Game.StatusGame.PLAYING:
+        while isinstance(self._state, PlayingState):
             game_state.update(game=self)
             key = self._screen.getch()
 
@@ -91,8 +91,8 @@ class Game(metaclass=Singleton):
             self._screen.addstr(height - 2, 0, bottom_menu)
 
             self._screen.addstr(
-                self.snake.snake[0]["position"][0],
-                self.snake.snake[0]["position"][1],
+                int(self.snake.x),
+                int(self.snake.y),
                 self.snake.snake[0]["character"],
             )
             self._screen.addstr(
@@ -116,8 +116,8 @@ class Game(metaclass=Singleton):
                     self.game_settings.WIDTH + 2,
                     "||",
                 )
-            position_x = int(f"{(self.snake.position[1] - 2):.0f}")
-            position_y = int(f"{(self.snake.position[0] - 6):.0f}")
+            position_x = int(f"{(self.snake.x - 6):.0f}")
+            position_y = int(f"{(self.snake.y - 2):.0f}")
             self._screen.addstr(
                 5,
                 self.game_settings.WIDTH + 2,
