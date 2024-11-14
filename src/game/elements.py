@@ -91,3 +91,16 @@ class Wall(Element):
     def collition(self, object: Element) -> None:
         ...
         # if
+
+
+class Food(Element):
+    character = 'X'
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return self.character
+
+    def collition(self, object: Element) -> None: ...

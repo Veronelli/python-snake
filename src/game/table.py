@@ -1,10 +1,11 @@
 __all__ = ('Table',)
 
-from src.game.elements.wall import Wall
+from src.game.elements import Snake, Wall
+from src.settings import Player
 
 
 class Table:
-    def __init__(self, columns: int, rows: int):
+    def __init__(self, columns: int, rows: int, player_settings: Player):
         self.columns = columns
         self.rows = rows
 
@@ -15,9 +16,9 @@ class Table:
             Wall(x=column, y=rows) for column in range(0, columns + 1)
         ]
 
-
-if __name__ == "__main__":
-    table = Table(columns=10, rows=10)
-    print(
-        [f'(format={wall.character} {wall.x} {wall.y})' for wall in table.walls]
-    )
+        self.player = Snake(
+            postion=player_settings.POSITION,
+            direction=player_settings.DIRECTION,
+            direction_text=player_settings.DIRECTION_TEXT,
+            speed=player_settings.SPEED,
+        )

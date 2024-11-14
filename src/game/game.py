@@ -55,6 +55,13 @@ class Game(metaclass=Singleton):
         """
         self._state = state
 
+    def draw(self) -> None:
+        """
+        Draw the game
+        """
+        self._state.enter(self)
+        self._state.update(self)
+
     def start(self) -> None:
         """
         Start the game
