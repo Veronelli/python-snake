@@ -1,46 +1,48 @@
 # Python Snake
 
-Python Snake is a simple terminal-based *Snake* game. Currently, it displays a game board, a snake, and an apple, but its mechanics are still under development. The long-term goal is to create a modular system where the game logic is fully decoupled from the interface, enabling other applications to interact with the game and render its states independently.
+Python Snake is a simple terminal-based *Snake* game. The project is evolving, and new mechanics are being added incrementally. Currently, the game supports basic gameplay features such as collision detection and increasing speed.
 
 ## Current Features
 
-- Move snake over the table
-- Generates a game board with defined borders.
-- Displays a snake (`O`) and an apple (`X`).
-- Basic rendering of the game's state.
+- **Game Board**:
+  - A bordered play area is displayed in the terminal.
+  - A snake (`O`) and a food item (`X`) are rendered.
 
-### Current Limitations
-- No interaction between the snake and the apple.
-- No collision detection or growth mechanics.
+- **Game Mechanics**:
+  - The snake moves within the game board.
+  - Collisions:
+    - Collision with food increases the speed of the snake.
+    - Collision with walls or the snake's own body ends the game.
+  - Speed Adjustment:
+    - The snake's speed dynamically increases when it consumes food.
+
+- **Planned Improvements**:
+  - Fully functional gameplay execution.
+  - Snake growth when eating food.
+  - Scoring system.
 
 ## Screenshot
 Here is an example of the current game state:
 
 
-[Demo](https://github.com/user-attachments/assets/2bdc3838-84d0-4017-a220-825d36cada4a
-)
+https://github.com/user-attachments/assets/aa2b32ec-5c4b-46d2-b94a-3d4541693144
+
+
 
 ## Future Vision
 
-- **Separation of Logic and Rendering**: The game logic will be moved to a central module that allows interaction via an API or function calls. This will enable:
-  - Rendering the game in various interfaces (e.g., graphical, web, apps).
-  - Integration of the game with other applications.
-- **Game Mechanics**:
-  - Snake movement.
-  - Snake growth when eating the apple.
-  - Collision detection with walls or the snake itself.
-  - A scoring system.
-- **Extensibility**:
+- **Separation of Logic and Rendering**: The game's logic will be abstracted into a central module, enabling interaction via an API or function calls for rendering in various interfaces.
+- **Game Modes and Extensibility**:
   - Multiple game modes.
-  - Support for customizable settings.
+  - Customizable settings like board size, initial speed, etc.
 
 ## Usage
 
 ### Requirements
 - Python 3.12 (recommended).
 
-### Setting up the environment
-It's recommended to use a virtual environment for this project. You can set it up as follows:
+### Setting up the Environment
+To ensure a consistent environment, it's recommended to use a virtual environment.
 
 1. Create a virtual environment:
    ```
@@ -55,18 +57,31 @@ It's recommended to use a virtual environment for this project. You can set it u
      ```
      .\venv\Scripts\activate
      ```
-3. Install the dependencies:
+3. Install dependencies from the `requirements.txt` file:
    ```
    pip install -r requirements.txt
    ```
 
-### Instructions
+### Running the Game
 1. Clone this repository:
    ```
    git clone https://github.com/your_username/python-snake.git
    cd python-snake
    ```
 2. Run the main script:
-   ```
+  ```
    python main.py
-   ```
+  ```
+
+   **Note**: Currently, the game cannot be fully executed due to pending implementation of core functionalities.
+
+
+## Contributions
+
+Contributions are welcome! If you have ideas or improvements, feel free to open an issue or submit a pull request.
+
+## TODOs
+- Implement snake growth upon consuming food.
+- Allow the game to run seamlessly.
+- Add a scoring system based on snake growth and speed.
+
