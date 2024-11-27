@@ -1,5 +1,5 @@
 from dataclasses import asdict
-from typing import Any
+from typing import Any, TYPE_CHECKING
 from src.common import DirectionPlayer
 from src.game.type import SnakeType
 from src.settings import settings
@@ -7,16 +7,22 @@ import random
 
 __all__ = ('Snake', 'Wall')
 
+if TYPE_CHECKING:
+    from src.game.table import Table
+
 
 class Element:
     name: str
 
 
-    def collition(self, element: object) -> None:
+    def collision(self, table: 'Table', element: 'Element') -> None:
         '''
-        Detect collition between two elements
+        Detect collision between two elements
         '''
-        raise NotImplementedError('collition method must be implemented')
+        return
+
+    def on_collision(self, element: 'Element') ->None:
+        return
 
     def get_position(self) -> Any:
         '''
@@ -55,6 +61,11 @@ class Snake(Element):
         )
         self._collided: bool = False
 
+    list_collision = [
+        "Wall",
+        "Food"
+    ]
+
     @property
     def collided(self) -> bool:
         return self._collided
@@ -74,8 +85,44 @@ class Snake(Element):
             int(self.y),
         ]
 
+    def collision(self, table: 'Table', element: Element) -> None:
+        """
+        Handles the collision logic between the current object and another element.
+
+        This method checks if the current object (`self`) collides with another
+        specified `element`. If the `element` is of a type listed in the
+        `list_collision` attribute of the current object, the `on_collision`
+        method of the `element` is triggered. The `table` is passed as a
+        parameter to provide context for the collision.
+
+        Args:
+            table (Table): The table or environment in which the collision occurs.
+            element (Element): The other element involved in the potential collision.
+
+        Returns:
+            None: This method does not return a value. It only executes the
+                  collision logic.
+
+        Notes:
+            - The method skips collision processing if `self` and `element` are
+              the same object.
+            - The `list_collision` attribute is expected to be a list of type names
+              (as strings) that the current object can collide with.
+
+        Example:
+            If `self.list_collision` is `["Player", "Enemy"]`, and `element` is
+            an instance of a class with the name "Player", the `on_collision`
+            method of `element` will be called.
+        """
+        if self == element:
+            return
+        if (
+                self.get_position() == element.get_position()
+        ):
+            element.on_collision(table=table, element=self)
+
     def get_position(self) -> list[float]:
-        return [self.x, self.y]
+        return [int(self.x), int(self.y)]
 
     def expect_inputs(self, key: int) -> None:
         """
@@ -106,13 +153,12 @@ class Wall(Element):
     def __str__(self):
         return self.character
 
-    def collition(self, object: Element) -> None:
-        ...
-        # if
-
     def get_position(self) -> list[str, Any]:
         return [self.x, self.y]
 
+    def on_collision(self, table: 'Table', element: 'Element') ->None:
+        if type(element).__name__ == 'Snake':
+            table.stop = True
 
 class Food(Element):
     def __init__(self):
@@ -133,4 +179,7 @@ class Food(Element):
     def __str__(self):
         return self.character
 
-    def collition(self, object: Element) -> None: ...
+    def on_collision(self, table: 'Table', element: 'Element') ->None:
+        if type(element).__name__ == 'Snake':
+            table.verify_respawn_food()
+            element.speed += 0.002

@@ -1,8 +1,6 @@
 __all__ = ('Table',)
 
-from src.common.types import ElementType
-from src.game.elements import Snake, Wall, Food
-from src.settings import Player
+from src.game.elements import Snake, Wall, Element, Food
 import random
 from typing import TYPE_CHECKING, Any, Callable
 
@@ -15,7 +13,12 @@ class Table:
         lambda position_1, position_2: position_1 == position_2
     )
 
-    def __init__(self, columns: int, rows: int, player_settings: Player):
+    list_handle_collition = [
+        [Snake, Wall],
+        [Snake, Food]
+    ]
+
+    def __init__(self, columns: int, rows: int, player_settings: Snake):
         self.columns = columns
         self.rows = rows
 
@@ -25,6 +28,7 @@ class Table:
         self.walls += [
             Wall(x=column, y=rows) for column in range(0, columns + 1)
         ]
+        self.stop = False
         self.food = Food()
 
         self.snake = Snake(
@@ -35,10 +39,10 @@ class Table:
         )
 
     @property
-    def items(self)-> list[ElementType]:
-        yield self.snake.to_dict()
-        yield self.food.to_dict()
-        yield from (wall.to_dict() for wall in self.walls)
+    def items(self)-> list[Element]:
+        yield self.snake
+        yield self.food
+        yield from (wall for wall in self.walls)
 
     def capture_keys(self, key: int) -> None:
         self.snake.expect_inputs(key=key)
@@ -46,7 +50,12 @@ class Table:
     def make_move(self) -> None:
         self.snake.move()
 
-    def verify_respawn_food(self):
+    def handle_event(self,) -> None:
+        for element_1 in self.items:
+            for element_2 in self.items:
+                element_1.collision(self, element=element_2)
+
+    def verify_respawn_food(self) -> None:
         x = random.randint(1, self.columns - 1)
         y = random.randint(1, self.rows - 1)
         for wall in self.walls:
